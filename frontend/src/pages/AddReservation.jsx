@@ -85,13 +85,17 @@ const AddReservation = () => {
         noOfPassengers: inputs.noOfPassengers,
         user: localStorage.getItem("userId"),
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        alert('Error adding reservation')
+      });
     const data = await res.data;
     return data;
   };
   const handleSubmit = (e) => {
+    
     e.preventDefault();
-    console.log(inputs);
+    console.log('inputs');
     sendRequest()
       .then((data) => console.log(data))
       .then(() => navigate("/reservations"));
@@ -102,18 +106,17 @@ const AddReservation = () => {
     <Body>
       <Form>
         <FormHeading>Add Reservation</FormHeading>
-        <Input name='firstName' value={inputs.firstName} onChange={handleChange} type='text' placeholder='First Name' />
-        <Input name='lastName' value={inputs.lastName} onChange={handleChange} type='text' placeholder='Last Name' />
-        <Input name='email' value={inputs.email}  type='email' onChange={handleChange} placeholder='Email' />
-        <Input name='phone' value={inputs.phone}  type='tel' onChange={handleChange} placeholder='Phone Number' />
-        <Input name='flightName' value={inputs.flightName}  onChange={handleChange} type='text' placeholder='Flight Name' />
-        <Input name='country' value={inputs.country} type='text' onChange={handleChange} placeholder='Country' />
-        <Input name='countryCode' value={inputs.countryCode } onChange={handleChange} type='text' placeholder='Country Code' />
+        <Input name='firstName' value={inputs.firstName} onChange={handleChange} type='text' placeholder='First Name' required/>
+        <Input name='lastName' value={inputs.lastName} onChange={handleChange} type='text' placeholder='Last Name' required/>
+        <Input name='email' value={inputs.email}  type='email' onChange={handleChange} placeholder='Email' required/>
+        <Input name='phone' value={inputs.phone}  type='tel' onChange={handleChange} placeholder='Phone Number' required/>
+        <Input name='flightName' value={inputs.flightName}  onChange={handleChange} type='text' placeholder='Flight Name' required/>
+        <Input name='country' value={inputs.country} type='text' onChange={handleChange} placeholder='Country' required/>
+        <Input name='countryCode' value={inputs.countryCode } onChange={handleChange} type='text' placeholder='Country Code' required/>
         <Input name='fClass' value={inputs.fClass}  type='text' onChange={handleChange} placeholder='Class' />
-        <Input name='noOfPassengers' value={inputs.noOfPassengers}  type='text' placeholder='Number of onChange={handleChange} Passengers' />
+        <Input name='noOfPassengers' value={inputs.noOfPassengers}  type='text' placeholder='Number of  Passengers' onChange={handleChange} required/>
         <ButtonContainer>
-          <Button 
-            onSubmit={handleSubmit}
+          <Button onClick={handleSubmit}
           >Save</Button>
         </ButtonContainer>
       </Form>
