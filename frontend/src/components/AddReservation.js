@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "./utils";
+import image from '../images/hero-imge.png'
 
 const labelStyles = { mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" };
 const AddReservation = () => {
@@ -52,6 +53,11 @@ const AddReservation = () => {
   };
   return (
     <div>
+          <div>
+      <img 
+      style={{ width: "100%" }}
+      src={image} alt="banner"/>
+    </div>
       <form onSubmit={handleSubmit}>
         <Box
           border={3}
