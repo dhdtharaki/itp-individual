@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useRef } from 'react'
 import Header from '../components/Header'
 import styled from 'styled-components'
-import { Body, Input } from './AddReservation'
+import { Body } from './AddReservation'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,6 +11,7 @@ import Footer from '../components/Footer';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { Link, NavLink  } from 'react-router-dom';
+import {useReactToPrint} from 'react-to-print'
 
 export const Container = styled.div`
   display: flex;
@@ -31,6 +32,7 @@ const Search = styled.div`
 `
 
 const Reservations = () => {
+  const componentPdf = useRef();
   const [reservations, setReservations] = useState([]);
   const id = localStorage.getItem("userId");
 
@@ -56,6 +58,12 @@ const Reservations = () => {
         console.log(error);
       });
   };
+
+  const generatePDF= useReactToPrint({
+      content:() => componentPdf.current,
+      documentTitle : "Reservations",
+      onAfterPrint:()=> alert("Data saved in PDF")
+  });
 
   /*const Table = ({ data }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -111,8 +119,9 @@ const Reservations = () => {
       <div style={{ textAlign: 'center' }}>
         <input type="text" placeholder="Search..." />
       </div>
-        
+      <div><Button variant="outlined" color="error" onClick={generatePDF}>PDF</Button></div>
       <TableContainer>
+        <div ref={componentPdf} style={{width:'100%'}}>
         <Table>
         <TableHead>
           <TableRow>
@@ -159,7 +168,10 @@ const Reservations = () => {
           ))}
         </TableBody>
       </Table>
+      </div>
     </TableContainer>
+
+   
       </Body>
       <Footer/>
     </Container>

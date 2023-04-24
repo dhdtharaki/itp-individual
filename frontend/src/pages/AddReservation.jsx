@@ -5,6 +5,8 @@ import { Container } from './Reservations'
 import Footer from '../components/Footer'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+
+
 export const Body = styled.div`
   display: flex;
   justify-content: center;
