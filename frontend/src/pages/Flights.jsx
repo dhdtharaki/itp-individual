@@ -24,8 +24,6 @@ const Flights = () => {
         <BasicCard/>
         <BasicCard/>
         <BasicCard/>
-        <BasicCard/>
-        <BasicCard/>
         </CardContainer>
     </Body>
     <Footer/>
@@ -33,4 +31,4 @@ const Flights = () => {
   )
 }
 
-export default Flights
+export default Flights;

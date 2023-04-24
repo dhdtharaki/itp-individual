@@ -1,4 +1,3 @@
-import './App.css';
 import {Routes, Route} from 'react-router-dom'
 import AddReservation from './pages/AddReservation';
 import Reservations from './pages/Reservations';

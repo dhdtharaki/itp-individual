@@ -103,7 +103,7 @@ const Header = () => {
                 </Menu>
                 <ButtonContainer>
                     <Button>
-                        Logout
+                    <NavLink to={'/'}>Log Out</NavLink>
                     </Button>
                 </ButtonContainer>
             </Right>
