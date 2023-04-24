@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Footer from '../components/Footer';
 import { Button } from '@mui/material';
 import axios from 'axios';
+import { Link, NavLink  } from 'react-router-dom';
 
 export const Container = styled.div`
   display: flex;
@@ -20,7 +21,13 @@ const TableContainer = styled.div`
 `
 const Search = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: center;
+  align-items : center;
+  fles-directions: column;
+  font-family: Arial;
+  width : 300px;
+  height : 400px;
+  margin-top:20px ;
 `
 
 const Reservations = () => {
@@ -43,17 +50,68 @@ const Reservations = () => {
       .delete(`http://localhost:5000/api/reservation/${reservationId}`)
       .then(() => {
         setReservations(reservations.filter((reservation) => reservation._id !== reservationId));
+        alert("You have cancelled a reservation!")
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
+  /*const Table = ({ data }) => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredData, setFilteredData] = useState(data);
 
+  const handleSearch = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    
+    const filtered = data.filter((reservation) =>
+    reservation.name.toLowerCase().includes(query.toLowerCase())
+    );
+    
+    setFilteredData(filtered);
+  };
+  filteredData.map((reservation) => (
+    <TableBody>
+    <TableRow key={reservation._id}>
+              <TableCell>{reservation.flightName}</TableCell>
+              <TableCell>{reservation.firstName}</TableCell>
+              <TableCell>{reservation.lastName}</TableCell>
+              <TableCell>{reservation.email}</TableCell>
+              <TableCell>{reservation.phone}</TableCell>
+              <TableCell>{reservation.country}</TableCell>
+              <TableCell>{reservation.countryCode}</TableCell>
+              <TableCell>{reservation.fClass}</TableCell>
+              <TableCell>{reservation.noOfPassengers}</TableCell>
+              <TableCell>
+                <Button variant="outlined" color="error" 
+                onClick={() => handleDelete(reservation._id)}
+                >
+                  Cancellation
+                </Button>
+                <Button variant="outlined" color="error" 
+                onClick={() => handleDelete(reservation._id)}
+                >
+                  Update
+                </Button>
+                <Button variant="outlined" color="error" 
+                onClick={() => handleDelete(reservation._id)}
+                >
+                  Pay now
+                </Button>
+              </TableCell>
+            </TableRow>
+            </TableBody>
+  ))*/
+  
   return (
     <Container>
       <Header />
       <Body>
+      <div style={{ textAlign: 'center' }}>
+        <input type="text" placeholder="Search..." />
+      </div>
+        
       <TableContainer>
         <Table>
         <TableHead>
@@ -69,7 +127,7 @@ const Reservations = () => {
             <TableCell>Passenger Count</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>
-        </TableHead>
+          </TableHead>
         <TableBody>
           {reservations.map((reservation) => (
             <TableRow key={reservation._id}>
@@ -86,7 +144,15 @@ const Reservations = () => {
                 <Button variant="outlined" color="error" 
                 onClick={() => handleDelete(reservation._id)}
                 >
-                  Delete
+                  Cancellation
+                </Button>
+                <Button variant="outlined" color="error">
+                <Link 
+                to ={`/update/${reservation._id}`}>
+                Update
+                </Link></Button>
+                <Button variant="outlined" color="error">
+                <NavLink to={'/payments'}>Pay Now</NavLink>
                 </Button>
               </TableCell>
             </TableRow>
@@ -97,7 +163,7 @@ const Reservations = () => {
       </Body>
       <Footer/>
     </Container>
+    
   )
 }
-
-export default Reservations
+export default Reservations;

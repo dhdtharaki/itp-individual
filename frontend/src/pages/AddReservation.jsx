@@ -109,10 +109,10 @@ const AddReservation = () => {
         <Input name='firstName' value={inputs.firstName} onChange={handleChange} type='text' placeholder='First Name' required/>
         <Input name='lastName' value={inputs.lastName} onChange={handleChange} type='text' placeholder='Last Name' required/>
         <Input name='email' value={inputs.email}  type='email' onChange={handleChange} placeholder='Email' required/>
-        <Input name='phone' value={inputs.phone}  type='tel' onChange={handleChange} placeholder='Phone Number' required/>
+        <Input name='phone' value={inputs.phone}  type='tel' onChange={handleChange} placeholder='Phone Number' required maxLength={10}/>
         <Input name='flightName' value={inputs.flightName}  onChange={handleChange} type='text' placeholder='Flight Name' required/>
         <Input name='country' value={inputs.country} type='text' onChange={handleChange} placeholder='Country' required/>
-        <Input name='countryCode' value={inputs.countryCode } onChange={handleChange} type='text' placeholder='Country Code' required/>
+        <Input name='countryCode' value={inputs.countryCode } onChange={handleChange} type='text' placeholder='Country Code' required maxLength={5}/>
         <Input name='fClass' value={inputs.fClass}  type='text' onChange={handleChange} placeholder='Class' />
         <Input name='noOfPassengers' value={inputs.noOfPassengers}  type='text' placeholder='Number of  Passengers' onChange={handleChange} required/>
         <ButtonContainer>
