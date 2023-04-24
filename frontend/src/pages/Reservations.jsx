@@ -35,6 +35,8 @@ const Reservations = () => {
   const componentPdf = useRef();
   const [reservations, setReservations] = useState([]);
   const id = localStorage.getItem("userId");
+  const [filterdata,setFilterdata] = useState([]);
+  const [query,setQuery] =  useState('');
 
   useEffect(() => {
     
@@ -42,6 +44,7 @@ const Reservations = () => {
       .get(`http://localhost:5000/api/reservation/all/${id}`)
       .then((response) => {
         setReservations(response.data.user);
+        setFilterdata(response.data.user);
       })
       .catch((error) => {
         console.log(error);
@@ -65,59 +68,26 @@ const Reservations = () => {
       onAfterPrint:()=> alert("Data saved in PDF")
   });
 
-  /*const Table = ({ data }) => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filteredData, setFilteredData] = useState(data);
 
   const handleSearch = (event) => {
-    const query = event.target.value;
-    setSearchQuery(query);
-    
-    const filtered = data.filter((reservation) =>
-    reservation.name.toLowerCase().includes(query.toLowerCase())
-    );
-    
-    setFilteredData(filtered);
+    const getSearch = event.target.value;
+    if(getSearch.length>0){
+      const searchdata = reservations.filter((item)=>item.flightName.toLowerCase().includes(getSearch));
+      setReservations(searchdata);
+    }
+    else{
+      setReservations(filterdata);
+    }
+    setQuery(getSearch);
   };
-  filteredData.map((reservation) => (
-    <TableBody>
-    <TableRow key={reservation._id}>
-              <TableCell>{reservation.flightName}</TableCell>
-              <TableCell>{reservation.firstName}</TableCell>
-              <TableCell>{reservation.lastName}</TableCell>
-              <TableCell>{reservation.email}</TableCell>
-              <TableCell>{reservation.phone}</TableCell>
-              <TableCell>{reservation.country}</TableCell>
-              <TableCell>{reservation.countryCode}</TableCell>
-              <TableCell>{reservation.fClass}</TableCell>
-              <TableCell>{reservation.noOfPassengers}</TableCell>
-              <TableCell>
-                <Button variant="outlined" color="error" 
-                onClick={() => handleDelete(reservation._id)}
-                >
-                  Cancellation
-                </Button>
-                <Button variant="outlined" color="error" 
-                onClick={() => handleDelete(reservation._id)}
-                >
-                  Update
-                </Button>
-                <Button variant="outlined" color="error" 
-                onClick={() => handleDelete(reservation._id)}
-                >
-                  Pay now
-                </Button>
-              </TableCell>
-            </TableRow>
-            </TableBody>
-  ))*/
+
   
   return (
     <Container>
       <Header />
       <Body>
-      <div style={{ textAlign: 'center' }}>
-        <input type="text" placeholder="Search..." />
+      <div className='col-md-6'>
+        <input type="text" placeholder="Search..."  value= {query} onChange={(e)=>handleSearch(e)}/>
       </div>
       <div><Button variant="outlined" color="error" onClick={generatePDF}>PDF</Button></div>
       <TableContainer>
