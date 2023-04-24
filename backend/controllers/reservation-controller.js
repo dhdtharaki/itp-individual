@@ -46,12 +46,12 @@ export const addReservation = async (req, res, next) => {
 };
 
 export const updateReservation = async (req, res, next) => {
-  const { flightName, firstName, lastName, email, phone, country, countryCode, fClass, noOfPassengers } = req.body;
+  const { firstName, lastName, email, phone } = req.body;
   const reservationId = req.params.id;
   let reservation;
   try {
     reservation = await Reservation.findByIdAndUpdate(reservationId, {
-      flightName, firstName, lastName, email, phone, country, countryCode, fClass, noOfPassengers,
+      firstName, lastName, email, phone,
     });
   } catch (err) {
     return console.log(err);
