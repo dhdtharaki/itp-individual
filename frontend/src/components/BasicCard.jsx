@@ -4,6 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Link } from 'react-router-dom';
 
 /*const bull = (
   <Box
@@ -19,15 +20,15 @@ export default function BasicCard() {
     <Card sx={{ minWidth: 275 }}>
        <CardContent>
        <Typography variant="h5" component="div">
-          Title
+       SriLankan Airlines
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Description
+        Launched in 1979, Sri Lanka’s National Carrier is an award winning air…
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Price per Person
+          134$ per Person
         </Typography>
-        <Button className='warning'>Book Now </Button>
+        <Link className='warning' to={'/add-reservation'}>Book Now </Link>
       </CardContent>
     </Card>
   );

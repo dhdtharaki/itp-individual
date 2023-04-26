@@ -4,7 +4,7 @@ import Header from '../components/Header'
 import { Container } from './Reservations'
 import Footer from '../components/Footer'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 
 export const Body = styled.div`
@@ -55,27 +55,27 @@ export const Input = styled.input`
 `
 
 const UpdateReservation = () => {
-  const id = localStorage.getItem("reservationId");
+  const id = useParams();
   const [values, setValues] = useState({
         id : id,
-        firstName : '',
-        lastName : '',
-        email : '',
-        phone : ''
+        firstName : "",
+        lastName : "",
+        email : "",
+        phone : ""
 
   });
   
   useEffect(() => {
     
     axios
-      .get(`http://localhost:5000/api/reservations/update/${id}`)
+      .get('http://localhost:5000/api/reservation/'+id)
       .then((response) => {
         setValues({...values, firstName : response.data.firstName,lastName : response.data.lastName,email : response.data.email,phone : response.data.phone});
       })
       .catch((error) => {
         console.log(error);
       });
-  });
+  },[]);
 const navigate = useNavigate();
   const handleSubmit =(e) =>{
     e.preventDefault();
@@ -95,10 +95,10 @@ const navigate = useNavigate();
     <Body>
       <Form onSubmit={handleSubmit}>
         <FormHeading>Update your personal details</FormHeading>
-        <Input name='firstName' value={values.firstName} type='text' placeholder='First Name' required onChange={e=> setValues({...values,firstName: e.target.value})} />
-        <Input name='lastName' value={values.lastName} type='text' placeholder='Last Name' required onChange={e=> setValues({...values,lastName: e.target.value})}/>
-        <Input name='email' value={values.email} type='email'  placeholder='Email' required onChange={e=> setValues({...values,email: e.target.value})}/>
-        <Input name='phone' value={values.phone} type='tel'  placeholder='Phone Number' required maxLength={10} onChange={e=> setValues({...values,phone: e.target.value})}/>
+        <Input name='firstName' type='text' placeholder='First Name'  value={values.firstName} required onChange={e=> setValues({...values,firstName: e.target.value})} />
+        <Input name='lastName'  type='text' placeholder='Last Name' value={values.lastName} required onChange={e=> setValues({...values,lastName: e.target.value})}/>
+        <Input name='email'  type='email'  placeholder='Email' value={values.email} required onChange={e=> setValues({...values,email: e.target.value})}/>
+        <Input name='phone'  type='tel'  placeholder='Phone Number' value={values.phone} required maxLength={10} onChange={e=> setValues({...values,phone: e.target.value})}/>
         <ButtonContainer>
           <Button>Save</Button>
         </ButtonContainer>
