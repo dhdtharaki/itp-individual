@@ -108,5 +108,6 @@ const navigate = useNavigate();
   </Container>
   )
   }
+}
 
 export default UpdateReservation
