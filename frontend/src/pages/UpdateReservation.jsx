@@ -11,7 +11,7 @@ export const Body = styled.div`
   display: flex;
   justify-content: center;
 `
-export const Form = styled.div`
+export const Form = styled.form`
   background-color: #A9C4B9;
   width: 900px;
   margin: 90px 0;
@@ -55,9 +55,8 @@ export const Input = styled.input`
 `
 
 const UpdateReservation = () => {
-  const id = useParams();
+  const {id} = useParams();
   const [values, setValues] = useState({
-        id : id,
         firstName : "",
         lastName : "",
         email : "",
@@ -66,22 +65,34 @@ const UpdateReservation = () => {
   });
   
   useEffect(() => {
-    
-    axios
-      .get('http://localhost:5000/api/reservation/'+id)
+    const getData = () => {
+      axios
+      .get(`http://localhost:5000/api/reservation/${id}`)
       .then((response) => {
-        setValues({...values, firstName : response.data.firstName,lastName : response.data.lastName,email : response.data.email,phone : response.data.phone});
+        // setValues({...values, firstName : response.data.firstName,lastName : response.data.lastName,email : response.data.email,phone : response.data.phone});
+        setValues(response.data.reservation)
       })
       .catch((error) => {
         console.log(error);
       });
-  },[]);
+    }; getData()
+  },[id]);
+
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.value,
+    })
+   
+  }
 const navigate = useNavigate();
   const handleSubmit =(e) =>{
+    console.log(values)
     e.preventDefault();
     axios
-    .put(`http://localhost:5000/api/reservations/update/${id}`,values)
+    .put(`http://localhost:5000/api/reservation/update/${id}`,values)
     .then((response) => {
+      alert('Updated')
       navigate(`/reservations`)
     })
     .catch((error) => {
@@ -95,12 +106,12 @@ const navigate = useNavigate();
     <Body>
       <Form onSubmit={handleSubmit}>
         <FormHeading>Update your personal details</FormHeading>
-        <Input name='firstName' type='text' placeholder='First Name'  value={values.firstName} required onChange={e=> setValues({...values,firstName: e.target.value})} />
-        <Input name='lastName'  type='text' placeholder='Last Name' value={values.lastName} required onChange={e=> setValues({...values,lastName: e.target.value})}/>
-        <Input name='email'  type='email'  placeholder='Email' value={values.email} required onChange={e=> setValues({...values,email: e.target.value})}/>
-        <Input name='phone'  type='tel'  placeholder='Phone Number' value={values.phone} required maxLength={10} onChange={e=> setValues({...values,phone: e.target.value})}/>
+        <Input name='firstName' type='text' placeholder='First Name'  value={values.firstName} required onChange={handleChange} />
+        <Input name='lastName'  type='text' placeholder='Last Name' value={values.lastName} required onChange={handleChange}/>
+        <Input name='email'  type='email'  placeholder='Email' value={values.email} required onChange={handleChange}/>
+        <Input name='phone'  type='tel'  placeholder='Phone Number' value={values.phone} required maxLength={10} onChange={handleChange}/>
         <ButtonContainer>
-          <Button>Save</Button>
+          <Button type='submit'>Save</Button>
         </ButtonContainer>
       </Form>
     </Body>
@@ -108,6 +119,6 @@ const navigate = useNavigate();
   </Container>
   )
   }
-}
+
 
 export default UpdateReservation
