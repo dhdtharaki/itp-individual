@@ -107,6 +107,6 @@ const navigate = useNavigate();
     <Footer/>
   </Container>
   )
-}
+  }
 
 export default UpdateReservation
