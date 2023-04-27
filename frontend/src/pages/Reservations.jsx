@@ -1,50 +1,55 @@
-import React, { useEffect, useState,useRef } from 'react'
+import axios from 'axios';
 import Header from '../components/Header'
 import styled from 'styled-components'
-import { Body } from './AddReservation'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Footer from '../components/Footer';
-import { Button } from '@mui/material';
-import axios from 'axios';
-import { Link, NavLink  } from 'react-router-dom';
+import { DataGrid } from '@mui/x-data-grid';
+import { useNavigate  } from 'react-router-dom';
+import { Box, Button } from '@mui/material';
 import {useReactToPrint} from 'react-to-print'
+import React, { useEffect, useState,useRef } from 'react'
+import { Edit, Delete, SearchOutlined } from '@mui/icons-material'
 
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const TableContainer = styled.div`
-  margin: 90px 0;
+const TableContainer = styled.div``
+const Input = styled.input`
+  outline: none;
+  border: 2px solid #efefef;
+  padding: 5px 10px;
+  height: 30px;
+  border-radius: 5px;
+  width: 300px;
 `
-const Search = styled.div`
+const SearchContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-items : center;
-  fles-directions: column;
-  font-family: Arial;
-  width : 300px;
-  height : 400px;
-  margin-top:20px ;
+  align-items: center;
 `
-
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  gap: 20px;
+`
+const ToolBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+`
 const Reservations = () => {
   const componentPdf = useRef();
   const [reservations, setReservations] = useState([]);
   const id = localStorage.getItem("userId");
-  const [filterdata,setFilterdata] = useState([]);
-  const [query,setQuery] =  useState('');
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    
     axios
       .get(`http://localhost:5000/api/reservation/all/${id}`)
       .then((response) => {
         setReservations(response.data.user);
-        setFilterdata(response.data.user);
       })
       .catch((error) => {
         console.log(error);
@@ -61,87 +66,109 @@ const Reservations = () => {
         console.log(error);
       });
   };
-
+  const handleClick = (id) => {
+    navigate(`update/${id}`)
+  }
   const generatePDF= useReactToPrint({
       content:() => componentPdf.current,
       documentTitle : "Reservations",
       onAfterPrint:()=> alert("Data saved in PDF")
   });
 
+  const columns = [
+    { field: 'flightName', headerClassName: 'headerStyles', headerName: 'Flight Name', flex: 1 },
+    { field: 'firstName', headerClassName: 'headerStyles', headerName: 'First Name', flex: 1 },
+    { field: 'lastName', headerClassName: 'headerStyles', headerName: 'Last Name', flex: 1 },
+    { field: 'email', headerClassName: 'headerStyles', headerName: 'Email', flex: 1 },
+    { field: 'phone', headerClassName: 'headerStyles', headerName: 'Phone', flex: 1 },
+    { field: 'country', headerClassName: 'headerStyles', headerName: 'Country', flex: 1 },
+    { field: 'countryCode', headerClassName: 'headerStyles', headerName: 'Country Code', flex: 1 },
+    { field: 'fClass', headerClassName: 'headerStyles', headerName: 'Flight Class', flex: 1 },
+    { field: 'noOfPassengers', headerClassName: 'headerStyles', headerName: 'Number of Passengers', flex: 1 },
+    {
+      field: 'action',
+      headerName: 'Action',
+      headerClassName: 'headerStyles',
+      flex: 1,
+      Align: 'center',
+      renderCell: (params) => (
+        <div>
+            <Button
+              onClick={() => handleClick(params.id)}
+              >
+              <Edit style={{ fontSize: '19px' }} />
+            </Button>
+          <Button
+            color="error"
+            >
+            <Delete onClick={() => handleDelete(params.id)} style={{ fontSize: '19px' }} />
+          </Button>
+          <Button
+            color="error"
+            >
+            <Delete onClick={() => handleDelete(params.id)} style={{ fontSize: '19px' }} />
+          </Button>
+        </div>
+      )
+    }
+    
+  ];
 
   const handleSearch = (event) => {
-    const getSearch = event.target.value;
-    if(getSearch.length>0){
-      const searchdata = reservations.filter((item)=>item.flightName.toLowerCase().includes(getSearch));
-      setReservations(searchdata);
-    }
-    else{
-      setReservations(filterdata);
-    }
-    setQuery(getSearch);
+    setSearchTerm(event.target.value);
   };
+  const searchedReservations = reservations.filter((reservation) =>
+    reservation.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   
+  const rows = searchedReservations.map((reservation) => ({
+    reservation_id: reservation._id,
+    flightName: reservation.flightName,
+    firstName: reservation.firstName,
+    lastName: reservation.lastName,
+    email: reservation.email,
+    phone: reservation.phone,
+    country: reservation.country,
+    countryCode: reservation.countryCode,
+    fClass: reservation.fClass,
+    noOfPassengers: reservation.noOfPassengers
+  }));
+  const getRowId = (row) => {
+    return row.reservation_id
+  }
   return (
     <Container>
       <Header />
       <Body>
-      <div className='col-md-6'>
-        <input type="text" placeholder="Search..."  value= {query} onChange={(e)=>handleSearch(e)}/>
-      </div>
-      <div><Button variant="outlined" color="error" onClick={generatePDF}>PDF</Button></div>
-      <TableContainer>
-        <div ref={componentPdf} style={{width:'100%'}}>
-        <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Flight Name</TableCell>
-            <TableCell>First Name</TableCell>
-            <TableCell>Last Name</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Phone</TableCell>
-            <TableCell>Country</TableCell>
-            <TableCell>Country Code</TableCell>
-            <TableCell>Class</TableCell>
-            <TableCell>Passenger Count</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-          </TableHead>
-        <TableBody>
-          {reservations.map((reservation) => (
-            <TableRow key={reservation._id}>
-              <TableCell>{reservation.flightName}</TableCell>
-              <TableCell>{reservation.firstName}</TableCell>
-              <TableCell>{reservation.lastName}</TableCell>
-              <TableCell>{reservation.email}</TableCell>
-              <TableCell>{reservation.phone}</TableCell>
-              <TableCell>{reservation.country}</TableCell>
-              <TableCell>{reservation.countryCode}</TableCell>
-              <TableCell>{reservation.fClass}</TableCell>
-              <TableCell>{reservation.noOfPassengers}</TableCell>
-              <TableCell>
-                <Button variant="outlined" color="error" 
-                onClick={() => handleDelete(reservation._id)}
-                >
-                  Cancellation
-                </Button>
-                <Button variant="outlined" color="error">
-                <Link 
-                to ={`/update/${reservation._id}`}>
-                Update
-                </Link></Button>
-                <Button variant="outlined" color="error">
-                <NavLink to={'/payments'}>Pay Now</NavLink>
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      </div>
-    </TableContainer>
-
-   
+        <ToolBar>
+          <SearchContainer>
+          <Input
+            onChange={handleSearch} value={searchTerm}
+            placeholder='Search email'
+          />
+            <SearchOutlined sx={{marginLeft: '-35px'}}/>
+          </SearchContainer>
+            <Button onClick={generatePDF} variant='contained'>Generate Report</Button>
+        </ToolBar>
+        <TableContainer ref={componentPdf} >
+        <Box sx={{ height: 400, width: '100%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5
+              }
+            }
+          }}
+          pageSizeOptions={[5]}
+          disableRowSelectionOnClick
+          getRowId={getRowId}
+        />
+      </Box>
+        </TableContainer>
       </Body>
       <Footer/>
     </Container>

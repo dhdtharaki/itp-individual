@@ -5,11 +5,14 @@ import { Container } from './Reservations'
 import Footer from '../components/Footer'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { TextField } from '@mui/material'
 
 
 export const Body = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 `
 export const Form = styled.div`
   background-color: #A9C4B9;
@@ -108,15 +111,15 @@ const AddReservation = () => {
     <Body>
       <Form>
         <FormHeading>Add Reservation</FormHeading>
-        <Input name='firstName' value={inputs.firstName} onChange={handleChange} type='text' placeholder='First Name' required/>
-        <Input name='lastName' value={inputs.lastName} onChange={handleChange} type='text' placeholder='Last Name' required/>
-        <Input name='email' value={inputs.email}  type='email' onChange={handleChange} placeholder='Email' required/>
-        <Input name='phone' value={inputs.phone}  type='tel' onChange={handleChange} placeholder='Phone Number' required maxLength={10}/>
-        <Input name='flightName' value={inputs.flightName}  onChange={handleChange} type='text' placeholder='Flight Name' required/>
-        <Input name='country' value={inputs.country} type='text' onChange={handleChange} placeholder='Country' required/>
-        <Input name='countryCode' value={inputs.countryCode } onChange={handleChange} type='text' placeholder='Country Code' required maxLength={5}/>
-        <Input name='fClass' value={inputs.fClass}  type='text' onChange={handleChange} placeholder='Class' />
-        <Input name='noOfPassengers' value={inputs.noOfPassengers}  type='text' placeholder='Number of  Passengers' onChange={handleChange} required/>
+        <TextField sx={{backgroundColor: 'white', outline: 'none', border: 'none'}} name='firstName' value={inputs.firstName} onChange={handleChange} type='text' placeholder='First Name' required/>
+        <TextField sx={{backgroundColor: 'white', outline: 'none', border: 'none'}} name='lastName' value={inputs.lastName} onChange={handleChange} type='text' placeholder='Last Name' required/>
+        <TextField sx={{backgroundColor: 'white', outline: 'none', border: 'none'}} name='email' value={inputs.email}  type='email' onChange={handleChange} placeholder='Email' required/>
+        <TextField sx={{backgroundColor: 'white', outline: 'none', border: 'none'}} name='phone' value={inputs.phone}  type='tel' onChange={handleChange} placeholder='Phone Number' required maxLength={10}/>
+        <TextField sx={{backgroundColor: 'white', outline: 'none', border: 'none'}} name='flightName' value={inputs.flightName}  onChange={handleChange} type='text' placeholder='Flight Name' required/>
+        <TextField sx={{backgroundColor: 'white', outline: 'none', border: 'none'}} name='country' value={inputs.country} type='text' onChange={handleChange} placeholder='Country' required/>
+        <TextField sx={{backgroundColor: 'white', outline: 'none', border: 'none'}} name='countryCode' value={inputs.countryCode } onChange={handleChange} type='text' placeholder='Country Code' required maxLength={5}/>
+        <TextField sx={{backgroundColor: 'white', outline: 'none', border: 'none'}} name='fClass' value={inputs.fClass}  type='text' onChange={handleChange} placeholder='Class' />
+        <TextField sx={{backgroundColor: 'white', outline: 'none', border: 'none'}} name='noOfPassengers' value={inputs.noOfPassengers}  type='text' placeholder='Number of  Passengers' onChange={handleChange} required/>
         <ButtonContainer>
           <Button onClick={handleSubmit}
           >Save</Button>
